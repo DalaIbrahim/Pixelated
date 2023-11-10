@@ -49,7 +49,9 @@ int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
 }
 
 int generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
-    
+    //search for a winning move
+    int bestMove = -1;
+    int bestScore = -1;
 }
 
 int main() {
