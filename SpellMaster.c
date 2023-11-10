@@ -18,7 +18,7 @@ int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
 
     int numSpells;
     fscanf(file, "%d", &numSpells);
-
+  
     for (int i = 0; i < numSpells; i++) 
         fscanf(file, "%s", spells[i]);
     
@@ -59,7 +59,7 @@ int main() {
     int count = 1, currentPlayer = rand() % 2; // either 0 or 1
     int numSpells = readSpellsFromFile(spells), chosenSpells[numSpells];
 
-    // enter player names
+    // enter player name
     printf("Enter your name: ");
     scanf("%s", playerName);
 
