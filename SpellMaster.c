@@ -48,10 +48,26 @@ int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
 }
 
 int generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
-    //search for a winning move
+
     int bestMove = -1;
     int bestScore = -1;
+    //search for a winning move
+   for (int i = 0; i < MAX_SPELLS; i++) {
+        if (chosenSpells[i] == 0 && spells[i][0] == lastChar) {
+            // now we check how good the move is based on future possibilities
+            int score = 0;
+            for (int j = 0; j < MAX_SPELLS; j++) {
+                if (chosenSpells[j] == 0 && spells[j][0] == spells[i][strlen(spells[i]) - 1]) {
+                    score++;
+                }
+            }
 
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = i;
+            }
+        }
+    }
 }
 
 int main() {
