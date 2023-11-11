@@ -91,8 +91,21 @@ int main() {
             printf("\t");
     }
 
-    printf("%s starts!\nEnter your spell: ", (currentPlayer == 1) ? playerName : BOT_NAME);
-    scanf("%s", chosenSpell);
+
+    printf("Tossing a coin ");
+    printf(". ");
+    printf(". ");
+    printf(". ");
+
+    if (currentPlayer == 1) {
+        printf("%s starts!\nEnter your spell: ", playerName);
+        scanf("%s", chosenSpell);
+    }
+    else {
+        printf("%s starts!", BOT_NAME);
+        generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
+    }
+    
 
     while (1) {
 
