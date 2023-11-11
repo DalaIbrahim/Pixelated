@@ -1,5 +1,4 @@
 // Project done by Dala Ibrahim (202206595), Jad Hneiny (202304032), and Issa Nouh (202205724)
-// Phase 1 Submission
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,6 +51,7 @@ int generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_
     //search for a winning move
     int bestMove = -1;
     int bestScore = -1;
+
 }
 
 int main() {
