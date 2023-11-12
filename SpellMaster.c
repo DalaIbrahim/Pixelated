@@ -139,23 +139,20 @@ int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpel
     int bestValue = INT_MIN;
 
     for (int i = 0; i < MAX_SPELLS; i++) {
-        if (chosenSpells[i] == 0 && spells[i][0] == lastChar) {
+        if (chosenSpells[i] == 0 && (lastChar == '*' || spells[i][0] == lastChar)) {
             chosenSpells[i] = 1;
             int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], 2, 0, INT_MIN, INT_MAX);
             chosenSpells[i] = 0;
 
-            if (value >= bestValue) {  // Changed the condition to consider equal values
+            if (value >= bestValue) {
                 bestValue = value;
                 bestMove = i;
             }
         }
     }
 
-    // If no optimal move is found, choose a random move
     if (bestMove == -1) {
-        do {
-            bestMove = rand() % MAX_SPELLS;
-        } while (chosenSpells[bestMove] == 1);
+        return -1; // no valid move found
     }
 
     return bestMove;
