@@ -164,11 +164,12 @@ int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpel
 
 int main() {
 
-    char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH], *prevSpell = NULL;
+     char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH], *prevSpell = NULL;
+    int chosenSpells[MAX_SPELLS] = {0};
     srand(time(NULL));
     int count = 1, currentPlayer = rand() % 2; // either 0 or 1
-    int numSpells = readSpellsFromFile(spells), chosenSpells[numSpells];
-
+    int numSpells = readSpellsFromFile(spells);
+    
     // enter player name
     printf("Enter your name: ");
     scanf("%s", playerName);
