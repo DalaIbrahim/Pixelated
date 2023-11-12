@@ -181,33 +181,42 @@ int main() {
     printf("Tossing a fair coin...\n");
     printf("%s starts!\n", (currentPlayer == 1) ? playerName : BOT_NAME);
 
-    while (1) {
+    while (1)
+    {
+        int otherPlayer = 1 - currentPlayer;
+        prevSpell = chosenSpell;
+        char lastChar = (prevSpell != NULL) ? prevSpell[strlen(prevSpell) - 1] : '\0';
 
-        int otherPlayer = 1 - currentPlayer; 
-        prevSpell = strdup(chosenSpell);
-        char lastChar = prevSpell[strlen(prevSpell)-1];
+        if (currentPlayer == 0)
+        { // Bot's turn
+            int botMove = generateBotMoveMinimax(spells, chosenSpells, lastChar);
+            strcpy(chosenSpell, spells[botMove]);
+            printf("%s chose: %s\n", BOT_NAME, chosenSpell);
+        }
+        else
+        { // Player's turn
+            printf("%s, your turn: ", playerName);
+            scanf("%s", chosenSpell);
+        }
 
-        if (!isValidSpell(spells, chosenSpell, numSpells, chosenSpells)) {
-            printf("%s wins! The spell was already chosen.\n", (otherPlayer == 1) ? playerName : BOT_NAME);
+        if (!isValidSpell(spells, chosenSpell, numSpells, chosenSpells) ||
+            !matchesLastChar(lastChar, chosenSpell, count))
+        {
+            printf("%s wins! Invalid move.\n", (otherPlayer == 1) ? playerName : BOT_NAME);
             break;
         }
 
-        if (!matchesLastChar(lastChar, chosenSpell, count)) {
-            printf("%s wins! Invalid spell1 The first letter doesn't match the last character of the previous spell.\n", (otherPlayer == 1) ? playerName : BOT_NAME);
-            break;
-        }
-
-        printf("%s, your turn: ", (currentPlayer == 0) ? playerName : BOT_NAME);
-        scanf("%s", chosenSpell);
-
-        if (count == numSpells) {
-            printf("%s wins! No more spells left.\n", (currentPlayer == 0) ? playerName : BOT_NAME);
+        // Check if both players have played at least once
+        if (count >= 2 * numSpells)
+        {
+            printf("Game over. It's a draw!\n");
             break;
         }
 
         count++;
         currentPlayer = otherPlayer;
-        free(prevSpell);
     }
+
+        return 0;
 
 }
