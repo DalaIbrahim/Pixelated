@@ -70,7 +70,19 @@ int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
     return chosenSpell[0] == lastChar;
 }
 
-
+// function to evaluate the potential of a move 
+int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move)
+{
+    int score
+    for (int i = 0; i < MAX_SPELLS; i++)
+    {
+        if (chosenSpells[i] == 0 && spells[i][0] == spells[move][strlen(spells[move]) - 1])
+        {
+            score++;
+        }
+    }
+    return score;
+}
 
 int main() {
 
