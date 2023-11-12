@@ -84,6 +84,14 @@ int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPE
     return score;
 }
 
+// minimax algorithm with alpha-beta pruning
+int minimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int depth, int maximizingPlayer, int alpha, int beta)
+{
+
+
+
+}
+
 int main() {
 
     char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH], *prevSpell = NULL;
