@@ -181,16 +181,6 @@ int main() {
     printf("Tossing a fair coin...\n");
     printf("%s starts!\n", (currentPlayer == 1) ? playerName : BOT_NAME);
 
-    if (currentPlayer == 1) {
-        printf("%s starts!\nEnter your spell: ", playerName);
-        scanf("%s", chosenSpell);
-    }
-    else {
-        printf("%s starts!", BOT_NAME);
-        generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
-    }
-    
-
     while (1) {
 
         int otherPlayer = 1 - currentPlayer; 
