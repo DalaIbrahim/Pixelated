@@ -170,25 +170,16 @@ int main() {
     int count = 1, currentPlayer = rand() % 2; // either 0 or 1
     int numSpells = readSpellsFromFile(spells);
     
-    // enter player name
+    // Enter player name
     printf("Enter your name: ");
     scanf("%s", playerName);
 
-    // print available spells
-    printf("Available Spells:\n");
-    for (int i = 0; i < numSpells; i++) {
-        printf("%20s", spells[i]);
-        if (i % 5 == 4 || i == numSpells - 1) 
-            printf("\n");
-        else 
-            printf("\t");
-    }
+    // Print available spells
+    printSpells(spells, numSpells);
 
-
-    printf("Tossing a coin ");
-    printf(". ");
-    printf(". ");
-    printf(". ");
+    // Toss a fair coin to determine who starts and announce the result
+    printf("Tossing a fair coin...\n");
+    printf("%s starts!\n", (currentPlayer == 1) ? playerName : BOT_NAME);
 
     if (currentPlayer == 1) {
         printf("%s starts!\nEnter your spell: ", playerName);
