@@ -18,6 +18,20 @@ int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPE
 int minimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int depth, int maximizingPlayer, int alpha, int beta);
 int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
 
+
+void printSpells(char spells[MAX_SPELLS][SPELL_LENGTH], int numSpells)
+{
+    printf("Available Spells:\n");
+    for (int i = 0; i < numSpells; i++)
+    {
+        printf("%20s", spells[i]);
+        if (i % 5 == 4 || i == numSpells - 1)
+            printf("\n");
+        else
+            printf("\t");
+    }
+}
+
 // function to read spells from 'spellsname.txt' file and store them
 int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
     FILE *file = fopen("spellsname.txt", "r");
