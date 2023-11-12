@@ -70,51 +70,7 @@ int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
     return chosenSpell[0] == lastChar;
 }
 
-int generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
 
-    int bestMove = -1;
-    int bestScore = -1;
-    //search for a winning move
-   for (int i = 0; i < MAX_SPELLS; i++) {
-        if (chosenSpells[i] == 0 && spells[i][0] == lastChar) {
-            // now we check how good the move is based on future possibilities
-            int score = 0;
-            for (int j = 0; j < MAX_SPELLS; j++) {
-                if (chosenSpells[j] == 0 && spells[j][0] == spells[i][strlen(spells[i]) - 1]) {
-                    score++;  //the bot evaluates its potential by 
-                            //counting how many other spells in the list 
-                            //start with the last character of the chosen spell
-                }
-            }
-
-            if (score < bestScore) { //picks the lower score, which means there are the least spells that can be played afterwards
-                bestScore = score;
-                bestMove = i;
-            }
-        }
-    }
-
-    // if the bot didnt find a winning move, it will check for a blocking move
-    if (bestMove == -1) {
-        for (int i = 0; i < MAX_SPELLS; i++) {
-            if (chosenSpells[i] == 0 && spells[i][0] == lastChar) {
-                return i; //this blocking move is just a move that will prevent the other player from winning directly
-            }
-        }
-    }
-
-    // if the bot doesn't find a winning or blocking move, it will generate a random move
-    if (bestMove == -1) {
-        int randomMove;
-        do {
-            randomMove = rand() % MAX_SPELLS;
-        } while (chosenSpells[randomMove] == 1);
-
-        return randomMove;
-    }
-
-    return bestMove;
-}
 
 int main() {
 
