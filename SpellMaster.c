@@ -64,7 +64,7 @@ int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LE
 
 // check if spell matches the last character of the previous spell
 int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
-    if (count == 1)
+    if (count == 0 || lastChar == '*' || lastChar == '\0')
         return 1;
     return chosenSpell[0] == lastChar;
 }
