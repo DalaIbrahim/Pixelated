@@ -92,6 +92,45 @@ if (depth == 0)
         return evaluateMove(spells, chosenSpells, lastChar, -1);
     }
 
+    int bestValue;
+    if (maximizingPlayer)
+    {
+        bestValue = INT_MIN;
+        for (int i = 0; i < MAX_SPELLS; i++)
+        {
+            if (chosenSpells[i] == 0 && spells[i][0] == lastChar)
+            {
+                chosenSpells[i] = 1;
+                int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], depth - 1, 0, alpha, beta);
+                bestValue = (value > bestValue) ? value : bestValue;
+                alpha = (alpha > bestValue) ? alpha : bestValue;
+                chosenSpells[i] = 0;
+
+                if (beta <= alpha)
+                    break;
+            }
+        }
+    }
+    else
+    {
+        bestValue = INT_MAX;
+        for (int i = 0; i < MAX_SPELLS; i++)
+        {
+            if (chosenSpells[i] == 0 && spells[i][0] == lastChar)
+            {
+                chosenSpells[i] = 1;
+                int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], depth - 1, 1, alpha, beta);
+                bestValue = (value < bestValue) ? value : bestValue;
+                beta = (beta < bestValue) ? beta : bestValue;
+                chosenSpells[i] = 0;
+
+                if (beta <= alpha)
+                    break;
+            }
+        }
+    }
+
+    return bestValue;
 
 }
 
