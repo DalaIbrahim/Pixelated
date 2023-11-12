@@ -64,7 +64,7 @@ int generateBotMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_
                 }
             }
 
-            if (score < bestScore) {
+            if (score < bestScore) { //picks the lower score, which means there are the least spells that can be played afterwards
                 bestScore = score;
                 bestMove = i;
             }
