@@ -9,7 +9,7 @@
 
 #define MAX_SPELLS 100
 #define SPELL_LENGTH 50
-#define BOT_NAME "BOT_NAME"
+#define BOT_NAME "VoldeBot"
 
 int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]);
 int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LENGTH], int numSpells, int chosenSpells[MAX_SPELLS]);
@@ -35,9 +35,11 @@ void printSpells(char spells[MAX_SPELLS][SPELL_LENGTH], int numSpells)
 // function to read spells from 'spellsname.txt' file and store them
 int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
     FILE *file = fopen("spellsname.txt", "r");
-    if (file == NULL) 
+    if (file == NULL) {
         printf("Error: Could not open 'spells.txt' file.\n");
-
+        return -1;
+    }
+    
     int numSpells;
     fscanf(file, "%d", &numSpells);
   
