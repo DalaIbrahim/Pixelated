@@ -39,7 +39,7 @@ int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
         printf("Error: Could not open 'spells.txt' file.\n");
         return -1;
     }
-    
+
     int numSpells;
     fscanf(file, "%d", &numSpells);
   
@@ -53,16 +53,13 @@ int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
 // check if spell has not been cast before
 int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LENGTH], int numSpells, int chosenSpells[MAX_SPELLS]) {
     for (int i = 0; i < numSpells; i++) {
-        if (strcmp(spell[i], chosenSpell) == 0) { // chosen spell is found in spells array
-            if (chosenSpells[i] == 1) // already chosen before
-                return 0; 
-            else {
-                chosenSpells[i] = 1;
-                return 1;
-            }
+        if (strcmp(spell[i], chosenSpell) == 0) {
+            if (chosenSpells[i] == 1)
+                return 0;
+            return 1;
         }
     }
-    return 0; 
+    return 0;
 }
 
 // check if spell matches the last character of the previous spell
