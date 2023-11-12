@@ -159,60 +159,70 @@ int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpel
 }
 
 int main() {
-
-     char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH], *prevSpell = NULL;
+    char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH];
     int chosenSpells[MAX_SPELLS] = {0};
     srand(time(NULL));
-    int count = 1, currentPlayer = rand() % 2; // either 0 or 1
+    int currentPlayer = rand() % 2;
     int numSpells = readSpellsFromFile(spells);
-    
-    // Enter player name
+
     printf("Enter your name: ");
     scanf("%s", playerName);
 
-    // Print available spells
     printSpells(spells, numSpells);
-
-    // Toss a fair coin to determine who starts and announce the result
     printf("Tossing a fair coin...\n");
     printf("%s starts!\n", (currentPlayer == 1) ? playerName : BOT_NAME);
 
-    while (1)
-    {
-        int otherPlayer = 1 - currentPlayer;
-        prevSpell = chosenSpell;
-        char lastChar = (prevSpell != NULL) ? prevSpell[strlen(prevSpell) - 1] : '\0';
+    char lastChar = '\0'; // Initialize lastChar
+    int count = 0;
 
-        if (currentPlayer == 0)
-        { // Bot's turn
-            int botMove = generateBotMoveMinimax(spells, chosenSpells, lastChar);
-            strcpy(chosenSpell, spells[botMove]);
-            printf("%s chose: %s\n", BOT_NAME, chosenSpell);
-        }
-        else
-        { // Player's turn
+    while (1) {
+        int otherPlayer = 1 - currentPlayer;
+
+        if (currentPlayer == 0) { // bot's turn
+            if (count == 0) { // bot's first move
+                int botMove = rand() % numSpells; // choose a random spell for the first spell
+                while (chosenSpells[botMove] == 1) { // this is to ensure that the spell hasn't been chosen before
+                    botMove = rand() % numSpells;
+                }
+                strcpy(chosenSpell, spells[botMove]);
+                chosenSpells[botMove] = 1;
+                printf("%s chose: %s\n", BOT_NAME, chosenSpell);
+            } else {
+                int botMove = generateBotMoveMinimax(spells, chosenSpells, lastChar);
+                if (botMove == -1) {
+                    printf("%s wins! No valid move for bot.\n", playerName);
+                    break;
+                }
+                strcpy(chosenSpell, spells[botMove]);
+                chosenSpells[botMove] = 1;
+                printf("%s chose: %s\n", BOT_NAME, chosenSpell);
+            }
+        } else { // player's turn
             printf("%s, your turn: ", playerName);
             scanf("%s", chosenSpell);
+            int spellIndex = -1;
+            for (int i = 0; i < numSpells; i++) {
+                if (strcmp(spells[i], chosenSpell) == 0) {
+                    spellIndex = i;
+                    break;
+                }
+            }
+            if (spellIndex == -1 || chosenSpells[spellIndex] == 1 || !matchesLastChar(lastChar, chosenSpell, count)) {
+                printf("%s wins! Invalid move.\n", BOT_NAME);
+                break;
+            }
+            chosenSpells[spellIndex] = 1;
         }
 
-        if (!isValidSpell(spells, chosenSpell, numSpells, chosenSpells) ||
-            !matchesLastChar(lastChar, chosenSpell, count))
-        {
-            printf("%s wins! Invalid move.\n", (otherPlayer == 1) ? playerName : BOT_NAME);
-            break;
-        }
+        lastChar = chosenSpell[strlen(chosenSpell) - 1];
+        count++;
+        currentPlayer = otherPlayer;
 
-        // Check if both players have played at least once
-        if (count >= 2 * numSpells)
-        {
+        if (count >= 2 * numSpells) {
             printf("Game over. It's a draw!\n");
             break;
         }
-
-        count++;
-        currentPlayer = otherPlayer;
     }
 
-        return 0;
-
+    return 0;
 }
