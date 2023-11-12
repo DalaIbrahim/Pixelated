@@ -134,6 +134,34 @@ if (depth == 0)
 
 }
 
+// function to generate a move for the bot using the minimax algorithm we previously implemented
+int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
+    int bestMove = -1;
+    int bestValue = INT_MIN;
+
+    for (int i = 0; i < MAX_SPELLS; i++) {
+        if (chosenSpells[i] == 0 && spells[i][0] == lastChar) {
+            chosenSpells[i] = 1;
+            int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], 2, 0, INT_MIN, INT_MAX);
+            chosenSpells[i] = 0;
+
+            if (value >= bestValue) {  // Changed the condition to consider equal values
+                bestValue = value;
+                bestMove = i;
+            }
+        }
+    }
+
+    // If no optimal move is found, choose a random move
+    if (bestMove == -1) {
+        do {
+            bestMove = rand() % MAX_SPELLS;
+        } while (chosenSpells[bestMove] == 1);
+    }
+
+    return bestMove;
+}
+
 int main() {
 
     char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH], *prevSpell = NULL;
