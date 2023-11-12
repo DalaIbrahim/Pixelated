@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
+
 
 #define MAX_SPELLS 100
 #define SPELL_LENGTH 50
