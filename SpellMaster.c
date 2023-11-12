@@ -11,6 +11,13 @@
 #define SPELL_LENGTH 50
 #define BOT_NAME "BOT_NAME"
 
+int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]);
+int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LENGTH], int numSpells, int chosenSpells[MAX_SPELLS]);
+int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count);
+int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move);
+int minimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int depth, int maximizingPlayer, int alpha, int beta);
+int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
+
 // function to read spells from 'spellsname.txt' file and store them
 int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
     FILE *file = fopen("spellsname.txt", "r");
