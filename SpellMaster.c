@@ -72,7 +72,7 @@ int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
 // function to evaluate the potential of a move 
 int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move)
 {
-    int score = 0;
+    int score = 0; // indicates the number of spells that can be chosen in the next move
     for (int i = 0; i < MAX_SPELLS; i++)
     {
         if (chosenSpells[i] == 0 && spells[i][0] == spells[move][strlen(spells[move]) - 1])
@@ -86,13 +86,13 @@ int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPE
 // minimax algorithm with alpha-beta pruning
 int minimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int depth, int maximizingPlayer, int alpha, int beta)
 {
-if (depth == 0)
+if (depth == 0) // if current state is terminal state
     {
         return evaluateMove(spells, chosenSpells, lastChar, -1);
     }
 
     int bestValue;
-    if (maximizingPlayer)
+    if (maximizingPlayer) // current player is maximizing player
     {
         bestValue = INT_MIN;
         for (int i = 0; i < MAX_SPELLS; i++)
@@ -110,7 +110,7 @@ if (depth == 0)
             }
         }
     }
-    else
+    else // minimizing player
     {
         bestValue = INT_MAX;
         for (int i = 0; i < MAX_SPELLS; i++)
@@ -159,7 +159,7 @@ int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpel
 }
 
 int main() {
-    char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH];
+    char spells[MAX_SPELLS][SPELL_LENGTH], chosenSpell[SPELL_LENGTH], playerName[SPELL_LENGTH], level;
     int chosenSpells[MAX_SPELLS] = {0};
     srand(time(NULL));
     int currentPlayer = rand() % 2;
@@ -167,6 +167,9 @@ int main() {
 
     printf("Enter your name: ");
     scanf("%s", playerName);
+
+    printf("\nSelect the level of difficulty (Easy/Medium/Hard): ");
+    scanf("%c", &level); // E, M, H
 
     printSpells(spells, numSpells);
     printf("Tossing a fair coin...\n");
@@ -187,7 +190,7 @@ int main() {
                 strcpy(chosenSpell, spells[botMove]);
                 chosenSpells[botMove] = 1;
                 printf("%s chose: %s\n", BOT_NAME, chosenSpell);
-            } else {
+            } else { // subsequent moves
                 int botMove = generateBotMoveMinimax(spells, chosenSpells, lastChar);
                 if (botMove == -1) {
                     printf("%s wins! No valid move for bot.\n", playerName);
