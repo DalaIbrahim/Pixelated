@@ -133,13 +133,36 @@ if (depth == 0) // if current state is terminal state
 
 }
 
-// function to generate a move for the bot using the minimax algorithm we previously implemented
-int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
+// Function to check if a move is risky (opens possibility for a blocking spell)
+int isRiskyMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move) {
+    int riskyMove = 0;
+    for (int i = 0; i < MAX_SPELLS; i++) {
+        if (chosenSpells[i] == 0 && spells[i][0] == spells[move][strlen(spells[move]) - 1]) {
+            // Potential blocking spell found
+            int playerMove = i;
+
+            // Check if the player's move is risky
+            chosenSpells[playerMove] = 1;
+            int value = minimax(spells, chosenSpells, spells[playerMove][strlen(spells[playerMove]) - 1], 2, 0, INT_MIN, INT_MAX);
+            chosenSpells[playerMove] = 0;
+
+            if (value == 0) {
+                riskyMove = 1;
+                break;
+            }
+        }
+    }
+    return riskyMove;
+}
+
+// Function to generate a move for the bot considering potential blocking spells
+int generateBotMoveWithBlock(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
     int bestMove = -1;
     int bestValue = INT_MIN;
 
     for (int i = 0; i < MAX_SPELLS; i++) {
         if (chosenSpells[i] == 0 && (lastChar == '*' || spells[i][0] == lastChar)) {
+            // If the move is not risky, proceed with minimax evaluation
             chosenSpells[i] = 1;
             int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], 2, 0, INT_MIN, INT_MAX);
             chosenSpells[i] = 0;
@@ -151,8 +174,21 @@ int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpel
         }
     }
 
-    if (bestMove == -1) {
-        return -1; // no valid move found
+    // If a non-risky move was found, check if it becomes risky in the player's following options
+    if (bestMove != -1 && isRiskyMove(spells, chosenSpells, lastChar, bestMove)) {
+        // If risky, search for another non-risky move
+        for (int i = 0; i < MAX_SPELLS; i++) {
+            if (chosenSpells[i] == 0 && (lastChar == '*' || spells[i][0] == lastChar)) {
+                chosenSpells[i] = 1;
+                int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], 2, 0, INT_MIN, INT_MAX);
+                chosenSpells[i] = 0;
+
+                if (value >= bestValue) {
+                    bestValue = value;
+                    bestMove = i;
+                }
+            }
+        }
     }
 
     return bestMove;
@@ -191,7 +227,7 @@ int main() {
                 chosenSpells[botMove] = 1;
                 printf("%s chose: %s\n", BOT_NAME, chosenSpell);
             } else { // subsequent moves
-                int botMove = generateBotMoveMinimax(spells, chosenSpells, lastChar);
+                int botMove = generateBotMoveWithBlock(spells, chosenSpells, lastChar);
                 if (botMove == -1) {
                     printf("%s wins! No valid move for bot.\n", playerName);
                     break;
