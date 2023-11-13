@@ -204,9 +204,6 @@ int main() {
     printf("Enter your name: ");
     scanf("%s", playerName);
 
-    printf("\nSelect the level of difficulty (Easy/Medium/Hard): ");
-    scanf("%c", &level); // E, M, H
-
     printSpells(spells, numSpells);
     printf("Tossing a fair coin...\n");
     printf("%s starts!\n", (currentPlayer == 1) ? playerName : BOT_NAME);
