@@ -40,3 +40,288 @@ Method Specifications:
 
 Testing:
 
+Our testing strategy is unit testing and regression testing: 
+Regression test: 1-BOT_NAME starts!
+BOT_NAME chose:(any spell in the list)
+....
+2- Issa starts!
+Issa, your turn: enervate
+VoldeBot chose: episkey
+Issa, your turn: (any spell from the list)
+Voldebot wins! Invalid move.
+
+3-VoldeBot starts!
+VoldeBot chose: (any knockdown move)
+Issa, your turn:(any spell from list)
+VoldeBot wins! Invalid move.
+
+4-Issa starts!
+Issa chose: banana
+VoldeBot wins! Invalid move.
+
+5-Issa starts!
+Issa, your turn: portus
+VoldeBot: stupefy
+Issa, your turn:(any spell from the list)
+VoldeBot wins! Invalid move.
+
+6-Issa, your turn: alohomora
+VoldeBot: avadaKedavra
+Issa, your turn: alohomora 
+VoldeBot wins! Invalid move.
+
+7-Issa, your turn: anonomora
+VoldeBot wins! Invalid move.
+
+
+
+Unit Test: 
+
+→ readSpellsFromFile: 
+
+#include <stdio.h>
+
+#define MAX_SPELLS 10
+#define SPELL_LENGTH 20
+
+int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]) {
+    FILE *file = fopen("spellsname.txt", "r");
+    if (file == NULL) {
+        printf("Error: Could not open 'spells.txt' file.\n");
+        return -1;
+    }
+
+    int numSpells;
+    fscanf(file, "%d", &numSpells);
+
+    for (int i = 0; i < numSpells; i++)
+        fscanf(file, "%s", spells[i]);
+
+    fclose(file);
+    return numSpells;
+}
+
+int main() {
+    char spellList[MAX_SPELLS][SPELL_LENGTH];
+    int totalSpells = readSpellsFromFile(spellList);
+
+    if (totalSpells != -1) {
+        printf("Total spells read: %d\n", totalSpells);
+        for (int i = 0; i < totalSpells; i++) {
+            printf("Spell %d: %s\n", i + 1, spellList[i]);
+        }
+    }
+
+    return 0;
+}
+
+
+→ IsValidSpell:
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
+#define MAX_SPELLS 10
+#define SPELL_LENGTH 20
+
+int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LENGTH], int numSpells, int chosenSpells[MAX_SPELLS]) {
+    for (int i = 0; i < numSpells; i++) {
+        if (strcmp(spell[i], chosenSpell) == 0) {
+            if (chosenSpells[i] == 1)
+                return 0;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int main() {
+    // Example spell list
+    char allSpells[MAX_SPELLS][SPELL_LENGTH] = {
+        "Abracadabra",
+        "Expelliarmus",
+        "Lumos",
+        "Alohomora",
+        "Expecto Patronum"
+    };
+
+    // Initialize chosenSpells array (all unchosen initially)
+    int chosenSpells[MAX_SPELLS] = {0};
+
+    // Test case 1: Valid spell that hasn't been chosen
+    char chosenSpell1[] = "Lumos";
+    assert(isValidSpell(allSpells, chosenSpell1, 5, chosenSpells) == 1);
+
+    // Test case 2: Valid spell that has been chosen
+    chosenSpells[2] = 1; // Mark "Lumos" as chosen
+    assert(isValidSpell(allSpells, chosenSpell1, 5, chosenSpells) == 0);
+
+    // Test case 3: Invalid spell
+    char chosenSpell2[] = "Expelliarmussss"; // Not in the list
+    assert(isValidSpell(allSpells, chosenSpell2, 5, chosenSpells) == 0);
+
+    printf("All unit tests passed!\n");
+    return 0;
+}
+
+
+→ MatchesLastChar: #include <stdio.h>
+#include <assert.h>
+
+#define SPELL_LENGTH 20
+#define MAX_SPELLS 10
+
+int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count) {
+    if (count == 0 || lastChar == '*' || lastChar == '\0')
+        return 1;
+    return chosenSpell[0] == lastChar;
+}
+
+int main() {
+    // Test case 1: Valid spell with count > 0
+    char spell1[] = "Abracadabra";
+    assert(matchesLastChar('A', spell1, 1) == 1);
+
+    // Test case 2: Invalid spell with count > 0
+    char spell2[] = "Expelliarmus";
+    assert(matchesLastChar('Z', spell2, 1) == 0);
+
+    // Test case 3: Valid spell with count = 0
+    assert(matchesLastChar('E', spell2, 0) == 1);
+
+    // Test case 4: Wildcard character
+    assert(matchesLastChar('*', spell1, 1) == 1);
+
+    printf("matchesLastChar tests passed!\n");
+    return 0;
+}
+
+
+
+→ evaluateMove: #include <stdio.h>
+#include <assert.h>
+#include <string.h>
+
+#define SPELL_LENGTH 20
+#define MAX_SPELLS 10
+
+int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move) {
+    int score = 0;
+    for (int i = 0; i < MAX_SPELLS; i++) {
+        if (chosenSpells[i] == 0 && spells[i][0] == spells[move][strlen(spells[move]) - 1]) {
+            score++;
+        }
+    }
+    return score;
+}
+
+int main() {
+    // Example spell list
+    char allSpells[MAX_SPELLS][SPELL_LENGTH] = {
+        "Abracadabra",
+        "Expelliarmus",
+        "Lumos",
+        "Alohomora",
+        "Expecto Patronum"
+    };
+ // Initialize chosenSpells array (all unchosen initially)
+    int chosenSpells[MAX_SPELLS] = {0};
+
+    // Test case 1: Evaluate move for "Lumos" (ends with 's')
+    chosenSpells[2] = 1; // Mark "Lumos" as chosen
+    assert(evaluateMove(allSpells, chosenSpells, 's', 2) == 1);
+
+    // Test case 2: Evaluate move for "Abracadabra" (ends with 'a')
+    assert(evaluateMove(allSpells, chosenSpells, 'a', 0) == 0);
+
+    // Test case 3: Evaluate move for "Expelliarmus" (ends with 's')
+    assert(evaluateMove(allSpells, chosenSpells, 's', 1) == 0);
+
+    printf("evaluateMove tests passed!\n");
+    return 0;
+}
+
+
+
+→ evaluateMove:int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
+    int bestMove = -1;
+    int bestValue = INT_MIN;
+
+    for (int i = 0; i < MAX_SPELLS; i++) {
+        if (chosenSpells[i] == 0 && (lastChar == '*' || spells[i][0] == lastChar)) {
+            chosenSpells[i] = 1;
+            int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], 2, 0, INT_MIN, INT_MAX);
+            chosenSpells[i] = 0;
+
+            if (value >= bestValue) {
+                bestValue = value;
+                bestMove = i;
+            }
+        }
+    }
+
+    if (bestMove == -1) {
+        return -1; // no valid move found
+    }
+
+    return bestMove;
+
+}
+
+
+→ generateBotMoveMinmax: 
+int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar) {
+    int bestMove = -1;
+    int bestValue = INT_MIN;
+
+    for (int i = 0; i < MAX_SPELLS; i++) {
+        if (chosenSpells[i] == 0 && (lastChar == '*' || spells[i][0] == lastChar)) {
+            chosenSpells[i] = 1;
+            int value = minimax(spells, chosenSpells, spells[i][strlen(spells[i]) - 1], 2, 0, INT_MIN, INT_MAX);
+            chosenSpells[i] = 0;
+
+            if (value >= bestValue) {
+                bestValue = value;
+                bestMove = i;
+            }
+        }
+    }
+
+    if (bestMove == -1) {
+        return -1; // no valid move found
+    }
+    return bestMove;
+}
+
+
+#include <stdio.h>
+#include <assert.h>
+
+// Your function definition
+int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
+
+// A mock implementation of the minimax function
+int minimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int depth, int isMaximizing, int alpha, int beta) {
+    // Your mock implementation here (if needed)
+    return 0;
+}
+
+void test_generateBotMoveMinimax() {
+    // Create some sample data
+    char spells[MAX_SPELLS][SPELL_LENGTH] = {"fire", "water", "earth"};
+    int chosenSpells[MAX_SPELLS] = {0, 0, 0};
+    char lastChar = '*';
+
+    // Call your function
+    int result = generateBotMoveMinimax(spells, chosenSpells, lastChar);
+
+    // Assert that the result is valid
+    assert(result >= -1 && result < MAX_SPELLS);
+
+    printf("Test passed: Best move = %d\n", result);
+}
+
+int main() {
+    test_generateBotMoveMinimax();
+    return 0;
+}
