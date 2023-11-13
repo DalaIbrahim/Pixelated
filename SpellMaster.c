@@ -27,7 +27,7 @@ void printSpells(char spells[MAX_SPELLS][SPELL_LENGTH], int numSpells)
         printf("%20s", spells[i]);
         if (i % 5 == 4 || i == numSpells - 1)
             printf("\n");
-        else
+        else 
             printf("\t");
     }
 }
