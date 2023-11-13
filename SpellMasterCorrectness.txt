@@ -1,0 +1,37 @@
+Method Specifications:
+
+1. void printSpells(char spells[MAX_SPELLS][SPELL_LENGTH], int numSpells);
+    Requires: spells is a 2D array of strings, and numSpells is the number of spells in the array.
+    Effects: Prints the available spells in a formatted manner.
+
+2. int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]);
+    Requires: Takes no parameters.
+    Effects: Reads spells from 'spellsname.txt' file, stores them in spells array, and returns the number of spells.
+
+3. int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LENGTH], int numSpells, int chosenSpells[MAX_SPELLS]);
+    Requires: spell is a 2D array of strings, chosenSpell is a string, numSpells is the number of spells, and chosenSpells is an array indicating whether spells have been chosen.
+    Effects: Checks if the chosen spell is valid (not chosen before) and returns 1 if valid, 0 otherwise.
+
+4. int matchesLastChar(char lastChar, char chosenSpell[SPELL_LENGTH], int count);
+    Requires: lastChar is a character, chosenSpell is a string, and count is an integer.
+    Effects: Checks if the chosen spell matches the last character of the previous spell.
+
+5. int evaluateMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move);
+    Requires: spells is a 2D array of strings, chosenSpells is an array indicating whether spells have been chosen, lastChar is a character, and move is an integer.
+    Effects: Evaluates the potential of a move based on the number of available spells that can be chosen next.
+
+6. int minimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int depth, int maximizingPlayer, int alpha, int beta);
+    Requires: spells is a 2D array of strings, chosenSpells is an array indicating whether spells have been chosen, lastChar is a character, depth is an integer, maximizingPlayer is a flag, alpha is an integer, and beta is an integer.
+    Effects: Implements the minimax algorithm with alpha-beta pruning for move evaluation.
+
+7. int generateBotMoveMinimax(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
+    Requires: spells is a 2D array of strings, chosenSpells is an array indicating whether spells have been chosen, and lastChar is a character.
+    Effects: Generates a move for the bot using the minimax algorithm.
+
+8. int isRiskyMove(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar, int move);
+    Requires: spells is a 2D array of strings, chosenSpells is an array indicating whether spells have been chosen, lastChar is a character, and move is an integer.
+    Effects: Checks if a move is risky (opens possibility for a blocking spell).
+
+9. int generateBotMoveWithBlock(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
+    Requires: spells is a 2D array of strings, chosenSpells is an array indicating whether spells have been chosen, and lastChar is a character.
+    Effects: Generates a move for the bot considering potential blocking spells.
