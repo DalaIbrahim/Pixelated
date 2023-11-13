@@ -5,7 +5,7 @@ Method Specifications:
     Effects: Prints the available spells in a formatted manner.
 
 2. int readSpellsFromFile(char spells[MAX_SPELLS][SPELL_LENGTH]);
-    Requires: Takes no parameters.
+    Requires: nothing
     Effects: Reads spells from 'spellsname.txt' file, stores them in spells array, and returns the number of spells.
 
 3. int isValidSpell(char spell[MAX_SPELLS][SPELL_LENGTH], char chosenSpell[SPELL_LENGTH], int numSpells, int chosenSpells[MAX_SPELLS]);
@@ -35,3 +35,8 @@ Method Specifications:
 9. int generateBotMoveWithBlock(char spells[MAX_SPELLS][SPELL_LENGTH], int chosenSpells[MAX_SPELLS], char lastChar);
     Requires: spells is a 2D array of strings, chosenSpells is an array indicating whether spells have been chosen, and lastChar is a character.
     Effects: Generates a move for the bot considering potential blocking spells.
+
+
+
+Testing:
+
